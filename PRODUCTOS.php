@@ -2,12 +2,42 @@
 global $wpdb;
 $result = $wpdb->get_results( "SELECT NOMBRE, URL,IMAGEN ,INFO FROM Productos");
 
+
+
+
 echo"
 <style>
-.elementor-posts-container .elementor-post{
-padding:10px !important; 
 
+.elementor-posts-container .elementor-post{
+    padding:10px !important; 
 }
+
+.posteo:nth-child(2){
+    transition-delay:200ms;
+}
+.posteo:nth-child(3){
+    transition-delay:400ms;
+}
+.posteo:nth-child(4){
+    transition-delay:600ms;
+}
+.posteo:nth-child(5){
+    transition-delay:800ms;
+}
+
+.hidden{
+    opacity: 0;
+    filter:blur(5px);
+       transform: translateX(-100%);
+       transition: all 1s;
+   }
+   
+   .show{
+   opacity:1;
+       filter:blur(0);
+       transform:translateX(0);
+   }
+
 </style>
 
 <div id=\"content\" class=\"site-content\">
@@ -34,12 +64,13 @@ echo"<div class=\"elementor-element-6ebb0a4 elementor-grid-3 elementor-grid-tabl
 <div class=\"elementor-widget-container\">
        <link
             rel=\"stylesheet\"
-            href=\"https://sanms.com.pe/wp/wp-content/plugins/pro-elements/assets/css/widget-posts.min.css\">
+            href=\"https://sanms.com.pe/wp-content/plugins/pro-elements/assets/css/widget-posts.min.css\">
 <div class=\"elementor-posts-container elementor-posts elementor-posts--skin-cards elementor-grid\">";
 
 foreach ($result as $row) {
-	
+    
             echo"
+            <section class=\"posteo hidden\">
             <article
             class=\"elementor-post elementor-grid-item post-662 post type-post status-publish format-standard has-post-thumbnail hentry category-destacadas\">
             <div class=\"elementor-post__card\">
@@ -70,6 +101,7 @@ foreach ($result as $row) {
                 </div>
             </div>
         </article>
+        </section>
             ";
   }      
 echo"
@@ -81,4 +113,32 @@ echo"
 </div>
 </section>
 ";
+
+echo" 
+<script>
+
+    const observer = new IntersectionObserver( (entries)=>{
+
+        entries.forEach((entry)=>{
+            console.log(entry)
+            if(entry.isIntersecting)
+            {
+                entry.target.classList.add('show');
+            }
+            else{
+                entry.target.classList.remove('show');
+            }
+
+
+        });
+        
+    });
+
+    const hiddenElements = document.querySelectorAll('.hidden');
+    hiddenElements.forEach((el)=> observer.observe(el));
+  
+
+</script>
+";
+
 ?>
